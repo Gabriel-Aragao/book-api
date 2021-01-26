@@ -1,0 +1,27 @@
+version: '3.5'
+services:
+  mysql:
+    container_name: merchant-db
+    image: mysql:5.7
+    command: --max_allowed_packet=32505856
+    environment:
+      - MYSQL_ROOT_PASSWORD=74YQyLNB9Nayv85K
+      - MYSQL_DATABASE=book
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - TZ=America/Sao_Paulo
+    expose:
+      - 3306
+    ports: 
+      - 3306:3306
+  api:
+    container_name: book-api
+    build: .
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/book?useLegacyDatetimeCode=false&serverTimezone=America/Sao_Paulo&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - 80:8080
